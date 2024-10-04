@@ -19,6 +19,9 @@ RUN update-ca-certificates
 # Download and execute the Bash script from the given URL
 RUN curl -sSL https://get.bacalhau.org/install.sh | bash
 
-COPY compute_node_image_setup.sh compute_node_image_setup.sh
-ENTRYPOINT ["/usr/bin/env"]
-CMD ./compute_node_image_setup.sh
+# Download the binary, make it executable, and move it to /usr/local/bin
+RUN curl -o /tmp/mc https://dl.min.io/client/mc/release/linux-amd64/mc \
+    && chmod +x /tmp/mc \
+    && mv /tmp/mc /usr/local/bin/
+
+ENTRYPOINT ["dockerd-entrypoint.sh"]

@@ -11,9 +11,8 @@ attempt=1
 # Start the first docker daemon
 dockerd-entrypoint.sh &
 
-
-while [ $attempt -le $MAX_ATTEMPTS ]; do
-    echo "Checking if dockerd is available (attempt $attempt of $MAX_ATTEMPTS)..."
+while [[ ${attempt} -le ${MAX_ATTEMPTS} ]]; do
+    echo "Checking if dockerd is available (attempt ${attempt} of ${MAX_ATTEMPTS})..."
 
     # Try to communicate with Docker daemon
     if docker info >/dev/null 2>&1; then
@@ -28,12 +27,12 @@ while [ $attempt -le $MAX_ATTEMPTS ]; do
     fi
 
     # Wait before retrying
-    echo "dockerd is not available yet. Retrying in $RETRY_INTERVAL seconds..."
-    sleep "$RETRY_INTERVAL"
+    echo "dockerd is not available yet. Retrying in ${RETRY_INTERVAL} seconds..."
+    sleep "${RETRY_INTERVAL}"
 
     # Increment attempt counter
     attempt=$((attempt + 1))
 done
 
-echo "dockerd did not become available within $TOTAL_WAIT_TIME_FOR_DOCKERD seconds."
+echo "dockerd did not become available within ${TOTAL_WAIT_TIME_FOR_DOCKERD} seconds."
 exit 1
